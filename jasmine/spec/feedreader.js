@@ -33,14 +33,12 @@ $(function() {
          */
          it('URL defined and URL is not empty',function(){
 
+                // i used the arrow function of es6 for cleaner code
 
             allFeeds.forEach(() => {
             expect($(allFeeds.url)).toBeDefined();
             expect($(allFeeds.url)).not.toBe('');
             });
-
-
-
          });
 
         /* TODO: Write a test that loops through each feed
@@ -48,27 +46,25 @@ $(function() {
          * and that the name is not empty.
          */
             it('ensures it has a name defined and name is not empty',function(){
-
+                
+                // i used the arrow function of es6 for cleaner code too
 
             allFeeds.forEach((feed) => {
             expect($(feed.name)).toBeDefined();
             expect($(feed.name)).not.toBe('');
             });
-
-
-
          });
     });
 
 
     /* TODO: Write a new test suite named "The menu" */
-        describe('The menu', function() {
+        describe('menu', function() {
         /* TODO: Write a test that ensures the menu element is
          * hidden by default. You'll have to analyze the HTML and
          * the CSS to determine how we're performing the
          * hiding/showing of the menu element.
          */
-         function Visibility(elem) {
+        /* function Visibility(elem) {
          var x = document.getElementsByClassName($(elem));
              if (x.style.visibility === "hidden") {
              x.style.visibility = "visible";
@@ -76,27 +72,30 @@ $(function() {
              x.style.visibility = "hidden";
              }
          
-            }
+            }*/
             it('ensures the menu element is  hidden', function() {
             //expect($('body.menu-hidden')).toBe(true);
-            expect($('body').hasClass('menu-hidden')).toBe(true);
+            expect($('body').hasClass('menu-hidden')).toBe(true);  //only one that worked out :)
             //Visibility(menu-hidden);
             });
          /* TODO: Write a test that ensures the menu changes
           * visibility when the menu icon is clicked. This test
           * should have two expectations: does the menu display when
           * clicked and does it hide when clicked again.
-          */
-            it('the menu display when clicked and does it hide when clicked again', function() {
-                //i didn't find a toggle function in the jasmine documentation so i did it the normal basic way
-                $('.menu-icon-link').click();
-                Visibility(menu-hidden);
-                $('.menu-icon-link').click();
-                Visibility(menu-hidden);
-                
-             });
+          */ 
+                /* i used the original way despite trying a sepetated function plus i checked 
+                for a toggle function but didn't found one */
+
+              it('menu display when clicked', function () {
+                $('a.menu-icon-link').click();
+                expect($('.menu-hidden').is(':visible')).toBe(false);
             });
 
+            it('hide when clicked', function () {
+                $('a.menu-icon-link').click();
+                expect($('.menu-hidden').is(':visible')).toBe(true);
+            });
+});
     /* TODO: Write a new test suite named "Initial Entries" */
             describe('Initial Entries', function() {
         /* TODO: Write a test that ensures when the loadFeed
@@ -106,15 +105,18 @@ $(function() {
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
          beforeEach(function (done) {
-
+            // i used the arrow function of the es6 for cleaner code as well
             loadFeed(0,()=>{
                 done();
             });
          });
-     });
          it('entry element within the feed container',function(){
-             expect($('.feed').hasClass('entry').length).toBeGreaterThan(0);
+             //expect($('.feed').hasClass('entry').length).toBeGreaterThan(0);
+             //expect($('.feed').hasClass('entry').length).not.toBe(0);
+             expect($('.feed .entry').length).toBeGreaterThan(0);  //the other ones didn't work despite them being syntaxly right :(
          });
+     });
+         
            
     /* TODO: Write a new test suite named "New Feed Selection" */
             describe('New Feed Selection', function() {
@@ -131,6 +133,9 @@ $(function() {
                 done();
             });
             */
+ 
+            /*the variable first_value is to catch the first value and compare it with the second value because 
+              we can't compare them without holding the actual value of one of them at a variable  */
             first_value=$('.feed').html();
             loadFeed(0,function(){
                 loadFeed(1,()=>{
@@ -139,7 +144,7 @@ $(function() {
              });
          });
          it('check the new feed',function(){
-             
+             //comparing the two values the initail one in the variable with [$('.feed').html()]
              expect($('.feed').html()).not.toBe(first_value);
             });
          });
