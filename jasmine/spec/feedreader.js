@@ -34,9 +34,9 @@ $(function() {
          it('URL defined and URL is not empty',function(){
 
 
-            someValues.forEach((feed) => {
-            expect(feed.url).toBeDefined();
-            expect(feed.url).not.toBe('');
+            allFeeds.forEach(() => {
+            expect($(allFeeds.url)).toBeDefined();
+            expect($(allFeeds.url)).not.toBe('');
             });
 
 
@@ -50,9 +50,9 @@ $(function() {
             it('ensures it has a name defined and name is not empty',function(){
 
 
-            someValues.forEach((feed) => {
-            expect(feed.name).toBeDefined();
-            expect(feed.name).not.toBe('');
+            allFeeds.forEach((feed) => {
+            expect($(feed.name)).toBeDefined();
+            expect($(feed.name)).not.toBe('');
             });
 
 
@@ -68,8 +68,19 @@ $(function() {
          * the CSS to determine how we're performing the
          * hiding/showing of the menu element.
          */
+         function Visibility(elem) {
+         var x = document.getElementsByClassName($(elem));
+             if (x.style.visibility === "hidden") {
+             x.style.visibility = "visible";
+             } else {
+             x.style.visibility = "hidden";
+             }
+         
+            }
             it('ensures the menu element is  hidden', function() {
-            expect('.menu-hidden').toEqual(true);
+            //expect($('body.menu-hidden')).toBe(true);
+            expect($('body').hasClass('menu-hidden')).toBe(true);
+            //Visibility(menu-hidden);
             });
          /* TODO: Write a test that ensures the menu changes
           * visibility when the menu icon is clicked. This test
@@ -77,25 +88,59 @@ $(function() {
           * clicked and does it hide when clicked again.
           */
             it('the menu display when clicked and does it hide when clicked again', function() {
-
-            expect(menu-icon-link.attr('.menu-hidden')).toEqual('highlighted');
+                //i didn't find a toggle function in the jasmine documentation so i did it the normal basic way
+                $('.menu-icon-link').click();
+                Visibility(menu-hidden);
+                $('.menu-icon-link').click();
+                Visibility(menu-hidden);
+                
              });
             });
 
     /* TODO: Write a new test suite named "Initial Entries" */
-            describe('The menu', function() {
+            describe('Initial Entries', function() {
         /* TODO: Write a test that ensures when the loadFeed
          * function is called and completes its work, there is at least
          * a single .entry element within the .feed container.
          * Remember, loadFeed() is asynchronous so this test will require
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
+         beforeEach(function (done) {
 
+            loadFeed(0,()=>{
+                done();
+            });
+         });
+     });
+         it('entry element within the feed container',function(){
+             expect($('.feed').hasClass('entry').length).toBeGreaterThan(0);
+         });
+           
     /* TODO: Write a new test suite named "New Feed Selection" */
-
+            describe('New Feed Selection', function() {
         /* TODO: Write a test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
+         var first_value = $('.feed').html ;
+         beforeEach(function (done){
+            /* loadFeed(0,()=>{
+                done();
+            });
+             loadFeed(1,()=>{
+                done();
+            });
+            */
+            first_value=$('.feed').html();
+            loadFeed(0,function(){
+                loadFeed(1,()=>{
+                done();
+                 });
+             });
          });
-}());
+         it('check the new feed',function(){
+             
+             expect($('.feed').html()).not.toBe(first_value);
+            });
+         });
+})();
